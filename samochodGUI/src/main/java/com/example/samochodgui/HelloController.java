@@ -3,18 +3,23 @@ package com.example.samochodgui;
 import com.example.samochodgui.symulator.Samochod;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+
+import java.io.IOException;
+
 public class HelloController {
     private Samochod samochod;
 
+    @FXML
+    private ChoiceBox samochodyChoiceBox;
 
     @FXML
     private Button engineStart;
@@ -32,6 +37,10 @@ public class HelloController {
     private Button dodajGazu;
     @FXML
     private Button ujmijGazu;
+    @FXML
+    private Button dodajSamochod;
+    @FXML
+    private Button usunSamochod;
 
     @FXML
     private TextField nrRejestracyjny;
@@ -76,6 +85,20 @@ public class HelloController {
         obroty.setText(String.valueOf(samochod.getSilnik().getObroty()));
     }
 
+    public void openAddCarWindow() throws IOException {
+        System.out.println("DodajSamochodController initialized");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("DodajSamochod.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loader.load()));
+        stage.setTitle("Dodaj nowy samochód");
+        stage.show();
+    }
+
+
+    public void onUsun(ActionEvent actionEvent) {
+        System.out.println("Samochod usuniety");
+    }
+
     @FXML
     private void onDodajGazu() {
         samochod.getSilnik().zwiekszObroty();
@@ -115,7 +138,6 @@ public class HelloController {
     private void onZwolnij(){
         samochod.getSkrzyniaBiegow().getSprzeglo().zwolnij();
     }
-
 
 }
 

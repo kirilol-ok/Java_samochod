@@ -33,8 +33,15 @@ public class DodajSamochodController {
     @FXML
     private Button cancelButton;
 
+
+    @FXML
+    private void onConfirm() {
+        System.exit(0);
+    }
+
+
 //    @FXML
-//    private void onConfirmButton() {
+//    private void onConfirm() {
 //        String model = modelTextField.getText();
 //        String registration = registrationTextField.getText();
 //        double weight;
@@ -51,9 +58,9 @@ public class DodajSamochodController {
 //        stage.close();
 //    }
 //
-//    @FXML
-//    private void onCancelButton() {
-//        Stage stage = (Stage) cancelButton.getScene().getWindow();
-//        stage.close();
-//    }
+    @FXML
+    private void onCancel() {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
+    }
 }
