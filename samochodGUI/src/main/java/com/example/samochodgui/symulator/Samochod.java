@@ -16,7 +16,13 @@ public class Samochod {
     public Samochod() {
         silnik = new Silnik();
         skrzyniaBiegow = new SkrzyniaBiegow();
-        pozycja = new Pozycja(0, 0);
+        pozycja = new Pozycja(20, 20);
+    }
+
+    public Samochod(String model, String nrRejest, double waga, int predkoscMax) {
+        silnik = new Silnik();
+        skrzyniaBiegow = new SkrzyniaBiegow();
+        pozycja = new Pozycja(20, 20);
     }
 
     public SkrzyniaBiegow getSkrzyniaBiegow(){
@@ -59,6 +65,8 @@ public class Samochod {
     public String getName(){
         return model;
     }
+
+    public String toString() { return model; }
 
     public String getNrRejest(){
         return nrRejest;

@@ -16,8 +16,9 @@ public class DodajSamochodController {
 
     private HelloController controller;
 
-    public void MainController(HelloController controller){
+    public void setHelloController(HelloController controller){
         this.controller = controller;
+        System.out.println("Controller received: " + controller);
     }
 
     @FXML
@@ -34,30 +35,35 @@ public class DodajSamochodController {
     private Button cancelButton;
 
 
+
     @FXML
-    private void onConfirm() {
-        System.exit(0);
+    private void addCarToList() {
+        String model = modelTextField.getText();
+        String nrRejest = registrationTextField.getText();
+        double waga;
+        int predkosc;
+
+        try {
+            waga = Double.parseDouble(weightTextField.getText());
+            predkosc = Integer.parseInt(speedTextField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Niepoprawne dane. Spróbuj ponownie.");
+            return;
+        }
+
+        System.out.println("Adding car: " + model + ", " + nrRejest + ", " + waga + ", " + predkosc);
+
+        if (controller != null) {
+            controller.addCarToList(model, nrRejest, waga, predkosc);
+        } else {
+            System.out.println("Controller is null. Cannot add car.");
+            return;
+        }
+
+        Stage stage = (Stage) confirmButton.getScene().getWindow();
+        stage.close();
     }
 
-
-//    @FXML
-//    private void onConfirm() {
-//        String model = modelTextField.getText();
-//        String registration = registrationTextField.getText();
-//        double weight;
-//        int speed;
-//        try {
-//            weight = Double.parseDouble(weightTextField.getText());
-//            speed = Integer.parseInt(speedTextField.getText());
-//        } catch (NumberFormatException e) {
-//            System.out.println("Niepoprawne dane. Spróbuj ponownie.");
-//            return;
-//        }
-//        HelloController.addCarToList(model, registration, weight, speed);
-//        Stage stage = (Stage) confirmButton.getScene().getWindow();
-//        stage.close();
-//    }
-//
     @FXML
     private void onCancel() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();

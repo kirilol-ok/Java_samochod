@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,11 +16,18 @@ import javafx.scene.Scene;
 
 import java.io.IOException;
 
+import javafx.util.StringConverter;
+
 public class HelloController {
     private Samochod samochod;
+    private HelloController controller;
+
+    private void setHelloController(HelloController controller){
+        this.controller = controller;
+    }
 
     @FXML
-    private ChoiceBox samochodyChoiceBox;
+    private ChoiceBox<Samochod> samochodyChoiceBox;
 
     @FXML
     private Button engineStart;
@@ -58,12 +66,29 @@ public class HelloController {
     @FXML
     private ImageView carImageView;
 
+    private ObservableList<Samochod> samochody = FXCollections.observableArrayList(
+            samochod = new Samochod()
+    );
+
     @FXML
     public void initialize() {
         System.out.println("HelloController initialized");
+        samochodyChoiceBox.setItems(samochody);
 
-        samochod = new Samochod();
+        samochodyChoiceBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Samochod samochod) {
+                return samochod != null ? samochod.getName() : "";
+            }
 
+            @Override
+            public Samochod fromString(String string) {
+                return null; // Этот метод не используется
+            }
+        });
+        if (!samochody.isEmpty()) {
+            samochodyChoiceBox.setValue(samochody.get(0));
+        }
         //
         // Load and set the car image
         Image carImage = new Image(getClass().getResource("/images/car.png").toExternalForm());
@@ -74,6 +99,12 @@ public class HelloController {
         carImageView.setTranslateX(20);
         carImageView.setTranslateY(20);
         refresh();
+    }
+
+    public void addCarToList(String model, String nrRejest, double waga, int predkosc) {
+       Samochod samochod = new Samochod(model, nrRejest, waga, predkosc);
+       samochody.add(samochod);
+       samochodyChoiceBox.setValue(samochod);
     }
 
     @FXML

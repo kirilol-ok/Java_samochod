@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import java.net.URL;
 
 
 public class HelloApplication extends Application {
@@ -19,6 +20,13 @@ public class HelloApplication extends Application {
         stage.setTitle("Symulator samochodu");
         stage.setScene(scene);
         stage.show();
+
+        URL imageUrl = getClass().getResource("/images/car_background.jpg");
+        if (imageUrl == null) {
+            System.out.println("Image not found!");
+        } else {
+            System.out.println("Image found: " + imageUrl);
+        }
 
     }
 
