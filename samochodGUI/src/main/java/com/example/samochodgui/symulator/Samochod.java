@@ -8,7 +8,7 @@ public class Samochod {
     int predkoscMax = 350;
     int aktPredkosc = 0;
     double waga = 0;
-
+    //
     Silnik silnik;
     SkrzyniaBiegow skrzyniaBiegow;
     Pozycja pozycja;
@@ -20,6 +20,11 @@ public class Samochod {
     }
 
     public Samochod(String model, String nrRejest, double waga, int predkoscMax) {
+        this.model = model;
+        this.nrRejest = nrRejest;
+        this.waga = waga;
+        this.predkoscMax = predkoscMax;
+        //
         silnik = new Silnik();
         skrzyniaBiegow = new SkrzyniaBiegow();
         pozycja = new Pozycja(20, 20);

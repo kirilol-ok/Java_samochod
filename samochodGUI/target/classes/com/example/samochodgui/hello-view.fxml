@@ -12,12 +12,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.samochodgui.HelloController">
    <left>
       <VBox prefHeight="650.0" prefWidth="248.0" BorderPane.alignment="CENTER">
          <children>
-            <TitledPane animated="false" expanded="false" text="Samochod">
+            <TitledPane animated="false" text="Samochod">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="219.0" prefWidth="246.0">
                      <children>
@@ -97,6 +98,16 @@
                                           <Insets left="20.0" top="7.0" />
                                        </HBox.margin>
                                     </Button>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c70101" height="38.0" stroke="BLACK" strokeType="INSIDE" width="41.0">
+                                       <HBox.margin>
+                                          <Insets left="40.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Rectangle>
+                                    <Rectangle fx:id="stanWlaczenia" arcHeight="5.0" arcWidth="5.0" fill="#02c76d" height="38.0" layoutX="178.0" layoutY="15.0" stroke="BLACK" strokeType="INSIDE" translateX="-41.0" visible="false" width="41.0">
+                                       <HBox.margin>
+                                          <Insets top="5.0" />
+                                       </HBox.margin>
+                                    </Rectangle>
                                  </children>
                               </HBox>
                            </children>

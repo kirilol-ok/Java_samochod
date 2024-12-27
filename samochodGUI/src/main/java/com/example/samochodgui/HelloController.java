@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import javafx.fxml.FXMLLoader;
@@ -64,6 +65,9 @@ public class HelloController {
     private TextField obroty;
 
     @FXML
+    private Rectangle stanWlaczenia;
+
+    @FXML
     private ImageView carImageView;
 
     private ObservableList<Samochod> samochody = FXCollections.observableArrayList(
@@ -86,6 +90,14 @@ public class HelloController {
                 return null; // Этот метод не используется
             }
         });
+
+        samochodyChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                samochod = newValue; // Устанавливаем текущий выбранный автомобиль
+                refresh(); // Обновляем поля
+            }
+        });
+
         if (!samochody.isEmpty()) {
             samochodyChoiceBox.setValue(samochody.get(0));
         }
@@ -101,34 +113,67 @@ public class HelloController {
         refresh();
     }
 
-    public void addCarToList(String model, String nrRejest, double waga, int predkosc) {
-       Samochod samochod = new Samochod(model, nrRejest, waga, predkosc);
-       samochody.add(samochod);
-       samochodyChoiceBox.setValue(samochod);
-    }
 
     @FXML
-    void refresh(){
-        samochodNazwa.setText(samochod.getName());
-        nrRejestracyjny.setText(samochod.getNrRejest());
-        predkosc.setText(String.valueOf(samochod.getAktPredkosc()));
-        bieg.setText(String.valueOf(samochod.getSkrzyniaBiegow().getAktBieg()));
-        obroty.setText(String.valueOf(samochod.getSilnik().getObroty()));
+    void refresh() {
+        if (samochod != null) {
+            samochodNazwa.setText(samochod.getName());
+            nrRejestracyjny.setText(samochod.getNrRejest());
+            predkosc.setText(String.valueOf(samochod.getAktPredkosc()));
+            bieg.setText(String.valueOf(samochod.getSkrzyniaBiegow().getAktBieg()));
+            obroty.setText(String.valueOf(samochod.getSilnik().getObroty()));
+        } else {
+            samochodNazwa.clear();
+            nrRejestracyjny.clear();
+            predkosc.clear();
+            bieg.clear();
+            obroty.clear();
+        }
     }
 
     public void openAddCarWindow() throws IOException {
         System.out.println("DodajSamochodController initialized");
+
+        // Загружаем FXML
         FXMLLoader loader = new FXMLLoader(getClass().getResource("DodajSamochod.fxml"));
+        Parent root = loader.load();
+        DodajSamochodController controller = loader.getController();
+        controller.setHelloController(this);
         Stage stage = new Stage();
-        stage.setScene(new Scene(loader.load()));
+        stage.setScene(new Scene(root));
         stage.setTitle("Dodaj nowy samochód");
         stage.show();
+        refresh();
     }
 
-
-    public void onUsun(ActionEvent actionEvent) {
-        System.out.println("Samochod usuniety");
+    public void addCarToList(String model, String nrRejest, double waga, int predkosc) {
+        Samochod samochod = new Samochod(model, nrRejest, waga, predkosc);
+        samochody.add(samochod);
+        samochodyChoiceBox.setValue(samochod);
+        refresh();
     }
+
+    @FXML
+    public void onUsun() {
+        // Получаем выбранный автомобиль
+        Samochod selectedCar = samochodyChoiceBox.getValue();
+
+        if (selectedCar != null) {
+            samochody.remove(selectedCar);
+
+            if (!samochody.isEmpty()) {
+                samochodyChoiceBox.setValue(samochody.get(0));
+            } else {
+                samochodyChoiceBox.setValue(null);
+            }
+
+            refresh();
+            System.out.println("Samochod usuniety: " + selectedCar.getName());
+        } else {
+            System.out.println("Nie wybrano samochodu do usunięcia.");
+        }
+    }
+
 
     @FXML
     private void onDodajGazu() {
@@ -143,13 +188,17 @@ public class HelloController {
     @FXML
     private void onWlancz(){
         samochod.wlacz();
+        stanWlaczenia.setVisible(true);
         System.out.println("Samochod uruchomiony!");
+        refresh();
 
     }
     @FXML
     private void onWylancz(){
         samochod.wylacz();
+        stanWlaczenia.setVisible(false);
         System.out.println("Samochod kaput");
+        refresh();
     }
     @FXML
     private void onZwiekszBieg(){
