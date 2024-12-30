@@ -6,7 +6,7 @@ public class Samochod {
     String nrRejest = "SO BEAST";
     String model = "Toyota Prius";
     int predkoscMax = 350;
-    int aktPredkosc = 0;
+    double aktPredkosc = 0;
     double waga = 0;
     //
     Silnik silnik;
@@ -59,7 +59,11 @@ public class Samochod {
         return aktPredkosc;
     }
 
-    public double getPredkoscMax(){
+    public void setPredkosc(){
+        this.aktPredkosc = predkoscMax/silnik.getMaxObroty()* silnik.getObroty();
+    }
+
+    public int getPredkoscMax(){
         return predkoscMax;
     }
 
@@ -80,6 +84,8 @@ public class Samochod {
     public double getWaga(){
         return waga;
     }
+
+    public boolean getStanWlaczenia(){ return stanWlaczenia; }
 
     public static void main(String[] args) {
         Samochod samochod = new Samochod();

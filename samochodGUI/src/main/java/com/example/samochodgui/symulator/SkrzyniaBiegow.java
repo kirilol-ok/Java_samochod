@@ -38,6 +38,8 @@ public class SkrzyniaBiegow extends Komponent {
         return aktualnyBieg;
     }
 
+    public int getIloscBiegow() { return iloscBiegow; }
+
     public int getAktPrzelozenie() {
         return aktualnePrzelozenie;
     }

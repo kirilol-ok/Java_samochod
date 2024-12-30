@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.util.logging.ErrorManager;
 
 import javafx.util.StringConverter;
 
@@ -63,6 +64,8 @@ public class HelloController {
     private TextField bieg;
     @FXML
     private TextField obroty;
+    @FXML
+    private TextField aktPredkosc;
 
     @FXML
     private Rectangle stanWlaczenia;
@@ -122,12 +125,16 @@ public class HelloController {
             predkosc.setText(String.valueOf(samochod.getAktPredkosc()));
             bieg.setText(String.valueOf(samochod.getSkrzyniaBiegow().getAktBieg()));
             obroty.setText(String.valueOf(samochod.getSilnik().getObroty()));
+            stanWlaczenia.setVisible(samochod.getStanWlaczenia());
+            aktPredkosc.setText(String.valueOf(samochod.getAktPredkosc()));
         } else {
             samochodNazwa.clear();
             nrRejestracyjny.clear();
             predkosc.clear();
             bieg.clear();
             obroty.clear();
+            stanWlaczenia.setVisible(false);
+            aktPredkosc.clear();
         }
     }
 
@@ -177,12 +184,22 @@ public class HelloController {
 
     @FXML
     private void onDodajGazu() {
-        samochod.getSilnik().zwiekszObroty();
+        int aktMaxObroty = samochod.getSilnik().getMaxObroty()
+                /samochod.getSkrzyniaBiegow().getIloscBiegow()
+                *samochod.getSkrzyniaBiegow().getAktBieg();
+        if(samochod.getSilnik().getObroty() >= aktMaxObroty){
+            System.out.println("Zwieksz bieg!!!");
+        } else {
+            samochod.getSilnik().zwiekszObroty();
+        }
+        samochod.setPredkosc();
+        System.out.println(samochod.getAktPredkosc());
         refresh();
     }
     @FXML
     private void onUjmijGazu() {
         samochod.getSilnik().zmniejszObroty();
+        samochod.setPredkosc();
         refresh();
     }
     @FXML
