@@ -1,7 +1,7 @@
 package com.example.samochodgui.symulator;
 
 
-public class Samochod {
+public class Samochod extends Thread {
     boolean stanWlaczenia = false;
     String nrRejest = "SO BEAST";
     String model = "Toyota Prius";
@@ -60,7 +60,11 @@ public class Samochod {
     }
 
     public void setPredkosc(){
-        this.aktPredkosc = predkoscMax/silnik.getMaxObroty()* silnik.getObroty();
+        this.aktPredkosc = (double) predkoscMax /silnik.getMaxObroty()* silnik.getObroty();
+    }
+
+    public void setPredkosc(double predkosc){
+        this.aktPredkosc = predkosc;
     }
 
     public int getPredkoscMax(){
@@ -71,7 +75,7 @@ public class Samochod {
         return pozycja.x;
     }
 
-    public String getName(){
+    public String getSamochodName(){
         return model;
     }
 

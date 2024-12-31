@@ -3,7 +3,6 @@ package com.example.samochodgui;
 import com.example.samochodgui.symulator.Samochod;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -16,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
 import java.io.IOException;
-import java.util.logging.ErrorManager;
 
 import javafx.util.StringConverter;
 
@@ -85,7 +83,7 @@ public class HelloController {
         samochodyChoiceBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(Samochod samochod) {
-                return samochod != null ? samochod.getName() : "";
+                return samochod != null ? samochod.getSamochodName() : "";
             }
 
             @Override
@@ -120,13 +118,13 @@ public class HelloController {
     @FXML
     void refresh() {
         if (samochod != null) {
-            samochodNazwa.setText(samochod.getName());
+            samochodNazwa.setText(samochod.getSamochodName());
             nrRejestracyjny.setText(samochod.getNrRejest());
             predkosc.setText(String.valueOf(samochod.getAktPredkosc()));
             bieg.setText(String.valueOf(samochod.getSkrzyniaBiegow().getAktBieg()));
             obroty.setText(String.valueOf(samochod.getSilnik().getObroty()));
             stanWlaczenia.setVisible(samochod.getStanWlaczenia());
-            aktPredkosc.setText(String.valueOf(samochod.getAktPredkosc()));
+            aktPredkosc.setText(String.valueOf(String.format("%.0f",samochod.getAktPredkosc())));
         } else {
             samochodNazwa.clear();
             nrRejestracyjny.clear();
@@ -175,7 +173,7 @@ public class HelloController {
             }
 
             refresh();
-            System.out.println("Samochod usuniety: " + selectedCar.getName());
+            System.out.println("Samochod usuniety: " + selectedCar.getSamochodName());
         } else {
             System.out.println("Nie wybrano samochodu do usunięcia.");
         }
@@ -184,16 +182,22 @@ public class HelloController {
 
     @FXML
     private void onDodajGazu() {
+        int aktObroty = samochod.getSilnik().getObroty();
         int aktMaxObroty = samochod.getSilnik().getMaxObroty()
                 /samochod.getSkrzyniaBiegow().getIloscBiegow()
                 *samochod.getSkrzyniaBiegow().getAktBieg();
-        if(samochod.getSilnik().getObroty() >= aktMaxObroty){
-            System.out.println("Zwieksz bieg!!!");
-        } else {
-            samochod.getSilnik().zwiekszObroty();
+
+        if(!samochod.getStanWlaczenia()) {
+            System.out.println("Wlacz samochod!");
+        } else{
+            if(aktObroty + 305 >= aktMaxObroty){
+                System.out.println("Zwieksz bieg!!!");
+                samochod.getSilnik().setObroty(aktMaxObroty);
+            } else {
+                samochod.getSilnik().zwiekszObroty();
+            }
+            samochod.setPredkosc();
         }
-        samochod.setPredkosc();
-        System.out.println(samochod.getAktPredkosc());
         refresh();
     }
     @FXML
@@ -215,6 +219,10 @@ public class HelloController {
         samochod.wylacz();
         stanWlaczenia.setVisible(false);
         System.out.println("Samochod kaput");
+        samochod.getSilnik().setObroty(0);
+        obroty.setText("0");
+        samochod.setPredkosc(0);
+        predkosc.setText("0");
         refresh();
     }
     @FXML
@@ -225,6 +233,12 @@ public class HelloController {
     @FXML
     private void onZmniejszBieg(){
         samochod.getSkrzyniaBiegow().zmniejszBieg();
+        int aktMaxObroty = samochod.getSilnik().getMaxObroty()
+                /samochod.getSkrzyniaBiegow().getIloscBiegow()
+                *samochod.getSkrzyniaBiegow().getAktBieg();
+        samochod.getSilnik().setObroty(aktMaxObroty);
+        obroty.setText(String.valueOf(aktMaxObroty));
+        samochod.setPredkosc();
         refresh();
     }
     @FXML
