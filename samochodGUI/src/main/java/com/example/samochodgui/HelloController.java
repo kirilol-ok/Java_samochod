@@ -1,6 +1,8 @@
 package com.example.samochodgui;
 
 import com.example.samochodgui.symulator.Samochod;
+import com.example.samochodgui.symulator.Pozycja;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -17,6 +20,8 @@ import javafx.scene.Scene;
 import java.io.IOException;
 
 import javafx.util.StringConverter;
+import javafx.scene.input.MouseEvent;
+
 
 public class HelloController {
     private Samochod samochod;
@@ -71,6 +76,9 @@ public class HelloController {
     @FXML
     private ImageView carImageView;
 
+    @FXML
+    private BorderPane mapa;
+
     private ObservableList<Samochod> samochody = FXCollections.observableArrayList(
             samochod = new Samochod()
     );
@@ -109,8 +117,16 @@ public class HelloController {
         carImageView.setImage(carImage);
         carImageView.setFitWidth(80); // Set appropriate
         carImageView.setFitHeight(48);
-        carImageView.setTranslateX(20);
-        carImageView.setTranslateY(20);
+        carImageView.setTranslateX(0);
+        carImageView.setTranslateY(0);
+        //
+        mapa.setOnMouseClicked(event -> {
+            double x = event.getX();
+            double y = event.getY();
+            Pozycja nowaPozycja = new Pozycja(x, y);
+            samochod.jedzDo(nowaPozycja);
+            System.out.printf("Машина должна двигаться в точку: x=%.2f, y=%.2f%n", x, y);
+        });
         refresh();
     }
 
@@ -118,9 +134,16 @@ public class HelloController {
     @FXML
     void refresh() {
         if (samochod != null) {
+            Platform.runLater(() -> {
+                carImageView.setLayoutX(samochod.getPozycja().getX());
+                carImageView.setLayoutY(samochod.getPozycja().getY());
+            });
+            carImageView.setLayoutX(samochod.getPozycja().getX());
+            carImageView.setLayoutY(samochod.getPozycja().getY());
+            //
             samochodNazwa.setText(samochod.getSamochodName());
             nrRejestracyjny.setText(samochod.getNrRejest());
-            predkosc.setText(String.valueOf(samochod.getAktPredkosc()));
+            predkosc.setText(String.valueOf(String.format("%.0f",samochod.getAktPredkosc())));
             bieg.setText(String.valueOf(samochod.getSkrzyniaBiegow().getAktBieg()));
             obroty.setText(String.valueOf(samochod.getSilnik().getObroty()));
             stanWlaczenia.setVisible(samochod.getStanWlaczenia());
@@ -178,6 +201,19 @@ public class HelloController {
             System.out.println("Nie wybrano samochodu do usunięcia.");
         }
     }
+
+    @FXML
+    public void setOnMouseClicked(MouseEvent event) {
+        double x = event.getX();
+        double y = event.getY();
+
+        Pozycja nowaPozycja = new Pozycja(x, y);
+        samochod.jedzDo(nowaPozycja);
+
+        System.out.printf("Машина должна двигаться в точку: x=%d, y=%d%n", x, y);
+        refresh();
+    }
+
 
 
     @FXML

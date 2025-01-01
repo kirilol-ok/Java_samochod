@@ -1,6 +1,8 @@
 package com.example.samochodgui.symulator;
 
 
+import javafx.application.Platform;
+
 public class Samochod extends Thread {
     boolean stanWlaczenia = false;
     String nrRejest = "SO BEAST";
@@ -12,14 +14,18 @@ public class Samochod extends Thread {
     Silnik silnik;
     SkrzyniaBiegow skrzyniaBiegow;
     Pozycja pozycja;
+    Pozycja cel = null;
 
     public Samochod() {
+        super();
         silnik = new Silnik();
         skrzyniaBiegow = new SkrzyniaBiegow();
         pozycja = new Pozycja(20, 20);
+        start();
     }
 
     public Samochod(String model, String nrRejest, double waga, int predkoscMax) {
+        super();
         this.model = model;
         this.nrRejest = nrRejest;
         this.waga = waga;
@@ -28,6 +34,7 @@ public class Samochod extends Thread {
         silnik = new Silnik();
         skrzyniaBiegow = new SkrzyniaBiegow();
         pozycja = new Pozycja(20, 20);
+        start();
     }
 
     public SkrzyniaBiegow getSkrzyniaBiegow(){
@@ -50,9 +57,9 @@ public class Samochod extends Thread {
         stanWlaczenia = false;
     }
 
-    public void jedzDo(int x, int y){
-        pozycja.x = x;
-        pozycja.y = y;
+    public void jedzDo(Pozycja nowaPozycja){
+        this.cel = nowaPozycja;
+        System.out.println("Target required: " + cel.getX() + " " + cel.getY());
     }
 
     public double getAktPredkosc(){
@@ -61,6 +68,7 @@ public class Samochod extends Thread {
 
     public void setPredkosc(){
         this.aktPredkosc = (double) predkoscMax /silnik.getMaxObroty()* silnik.getObroty();
+        System.out.println("Predkosc: " + aktPredkosc);
     }
 
     public void setPredkosc(double predkosc){
@@ -91,8 +99,39 @@ public class Samochod extends Thread {
 
     public boolean getStanWlaczenia(){ return stanWlaczenia; }
 
+    public void run() {
+        System.out.println("Метод run() запущен.");
+
+        double deltaT = 0.1;
+
+        while (true) {
+            if (cel != null) {
+                double odleglosc = Math.sqrt(Math.pow(cel.x - pozycja.x, 2) + Math.pow(cel.y - pozycja.y, 2));
+
+                if (odleglosc < 1.0) {
+                    cel = null;
+                    continue;
+                }
+
+                double dx = getAktPredkosc() * deltaT * (cel.x - pozycja.x) / odleglosc;
+                double dy = getAktPredkosc() * deltaT * (cel.y - pozycja.y) / odleglosc;
+
+                pozycja.x += dx;
+                pozycja.y += dy;
+
+                System.out.printf("Samochod %s na pozycji: x=%.2f, y=%.2f%n", model, pozycja.x, pozycja.y);
+            }
+
+            try {
+                Thread.sleep(100); // Задержка на 100 мс
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Samochod samochod = new Samochod();
-
+        samochod.start();
     }
 }

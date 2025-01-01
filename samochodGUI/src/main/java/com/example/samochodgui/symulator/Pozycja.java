@@ -1,21 +1,20 @@
 package com.example.samochodgui.symulator;
 
 public class Pozycja{
-    int x;
-    int y;
+    double x;
+    double y;
 
-    public Pozycja(int x, int y) {
+    public Pozycja(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public int getPozycjaX(int x) {
-        this.x = x;
+    public double getX() {
         return x;
     }
 
-    public int getPozycjaY(int y) {
-        this.y = y;
+    public double getY() {
         return y;
     }
+
 }
