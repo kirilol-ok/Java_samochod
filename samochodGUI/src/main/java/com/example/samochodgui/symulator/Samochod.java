@@ -110,7 +110,7 @@ public class Samochod extends Thread {
 
     public void setPredkosc(){
         this.aktPredkosc = (double) predkoscMax /silnik.getMaxObroty()* silnik.getObroty();
-        System.out.println("Predkosc: " + aktPredkosc);
+        System.out.println("Predkosc: " + String.format("%.0f",aktPredkosc));
     }
 
     public void setPredkosc(double predkosc){

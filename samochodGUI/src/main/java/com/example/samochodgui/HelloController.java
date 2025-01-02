@@ -124,7 +124,6 @@ public class HelloController {
             double y = event.getY();
             Pozycja nowaPozycja = new Pozycja(x, y);
             samochod.jedzDo(nowaPozycja);
-            System.out.printf("Машина должна двигаться в точку: x=%.2f, y=%.2f%n", x, y);
         });
         refresh();
     }
@@ -134,27 +133,60 @@ public class HelloController {
     public void refresh() {
         if (samochod != null) {
             Platform.runLater(() -> {
-                System.out.println("Platform running");
-                carImageView.setTranslateX(samochod.getPozycja().getX());
-                carImageView.setTranslateY(samochod.getPozycja().getY());
+                if (samochod.getPozycja() != null) {
+                    carImageView.setTranslateX(samochod.getPozycja().getX());
+                    carImageView.setTranslateY(samochod.getPozycja().getY());
+                }
             });
-            //
+
             samochodNazwa.setText(samochod.getSamochodName());
             nrRejestracyjny.setText(samochod.getNrRejest());
-            predkosc.setText(String.valueOf(String.format("%.0f",samochod.getAktPredkosc())));
+            predkosc.setText(String.format("%.0f", samochod.getAktPredkosc()));
             bieg.setText(String.valueOf(samochod.getSkrzyniaBiegow().getAktBieg()));
             obroty.setText(String.valueOf(samochod.getSilnik().getObroty()));
             stanWlaczenia.setVisible(samochod.getStanWlaczenia());
-            aktPredkosc.setText(String.valueOf(String.format("%.0f",samochod.getAktPredkosc())));
+            aktPredkosc.setText(String.format("%.0f", samochod.getAktPredkosc()));
         } else {
             samochodNazwa.clear();
             nrRejestracyjny.clear();
             predkosc.clear();
             bieg.clear();
             obroty.clear();
-            stanWlaczenia.setVisible(false);
             aktPredkosc.clear();
+            stanWlaczenia.setVisible(false);
         }
+    }
+
+    public void clear(){
+        System.out.println("clearing fields...");
+        samochod.getPozycja().setX(0);
+        samochod.getPozycja().setY(0);
+        samochodNazwa.setText("");
+        nrRejestracyjny.setText("");
+        predkosc.setText("");
+        bieg.setText("");
+        obroty.setText("");
+        stanWlaczenia.setVisible(false);
+        aktPredkosc.setText("");
+        onWylancz();
+    }
+
+    public void enable(){
+        dodajGazu.setDisable(false);
+        ujmijGazu.setDisable(false);
+        zwiekszBieg.setDisable(false);
+        zmniejszBieg.setDisable(false);
+        engineStart.setDisable(false);
+        engineStop.setDisable(false);
+    }
+
+    public void disable(){
+        dodajGazu.setDisable(true);
+        ujmijGazu.setDisable(true);
+        zwiekszBieg.setDisable(true);
+        zmniejszBieg.setDisable(true);
+        engineStart.setDisable(true);
+        engineStop.setDisable(true);
     }
 
     public void openAddCarWindow() throws IOException {
@@ -184,21 +216,23 @@ public class HelloController {
     public void onUsun() {
         // Получаем выбранный автомобиль
         Samochod selectedCar = samochodyChoiceBox.getValue();
-
+        clear();
+        disable();
         if (selectedCar != null) {
             samochody.remove(selectedCar);
-
             if (!samochody.isEmpty()) {
                 samochodyChoiceBox.setValue(samochody.get(0));
+                samochod = samochody.get(0); // Обновляем текущий автомобиль
             } else {
                 samochodyChoiceBox.setValue(null);
+                samochod = null; // Сбрасываем объект
             }
-
             refresh();
             System.out.println("Samochod usuniety: " + selectedCar.getSamochodName());
             pokazBlad("Samochod usuniety: " + selectedCar.getSamochodName());
         } else {
             System.out.println("Nie wybrano samochodu do usunięcia.");
+            pokazBlad("Nie wybrano samochodu do usunięcia.");
         }
     }
 
@@ -210,7 +244,6 @@ public class HelloController {
         Pozycja nowaPozycja = new Pozycja(x, y);
         samochod.jedzDo(nowaPozycja);
 
-        System.out.printf("Машина должна двигаться в точку: x=%d, y=%d%n", x, y);
         refresh();
     }
 

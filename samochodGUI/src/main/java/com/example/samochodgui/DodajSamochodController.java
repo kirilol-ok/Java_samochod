@@ -55,6 +55,7 @@ public class DodajSamochodController {
 
         if (controller != null) {
             controller.addCarToList(model, nrRejest, waga, predkosc);
+            controller.enable();
         } else {
             System.out.println("Controller is null. Cannot add car.");
             return;
