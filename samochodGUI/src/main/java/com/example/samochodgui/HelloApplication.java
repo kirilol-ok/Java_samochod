@@ -17,9 +17,13 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         HelloController controller = fxmlLoader.getController();
         Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+
         stage.setTitle("Symulator samochodu");
         stage.setScene(scene);
         stage.show();
+
+        Samochod samochod = new Samochod();
+        samochod.changeState();
 
         URL imageUrl = getClass().getResource("/images/car_background.jpg");
         if (imageUrl == null) {

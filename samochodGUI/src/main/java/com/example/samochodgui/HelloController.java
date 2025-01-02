@@ -196,6 +196,7 @@ public class HelloController {
 
             refresh();
             System.out.println("Samochod usuniety: " + selectedCar.getSamochodName());
+            pokazBlad("Samochod usuniety: " + selectedCar.getSamochodName());
         } else {
             System.out.println("Nie wybrano samochodu do usunięcia.");
         }
@@ -224,9 +225,11 @@ public class HelloController {
 
         if(!samochod.getStanWlaczenia()) {
             System.out.println("Wlacz samochod!");
+            pokazBlad("Wlacz samochod!");
         } else{
             if(aktObroty + 305 >= aktMaxObroty){
                 System.out.println("Zwieksz bieg!!!");
+                pokazBlad("Zwieksz bieg!!!");
                 samochod.getSilnik().setObroty(aktMaxObroty);
             } else {
                 samochod.getSilnik().zwiekszObroty();
@@ -283,5 +286,12 @@ public class HelloController {
         samochod.getSkrzyniaBiegow().getSprzeglo().zwolnij();
     }
 
-}
+    public void pokazBlad(String wiadomosc) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText(null);
+        alert.setContentText(wiadomosc);
+        alert.showAndWait();
+    }
 
+}

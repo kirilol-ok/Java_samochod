@@ -5,6 +5,10 @@ import com.example.samochodgui.HelloController;
 import javafx.application.Platform;
 import com.example.samochodgui.HelloController.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Samochod extends Thread {
     private HelloController controller;
 
@@ -12,6 +16,32 @@ public class Samochod extends Thread {
     public void setController(HelloController controller) {
         this.controller = controller;
     }
+
+    private List<Listener> listeners = new ArrayList<>();
+
+    // Метод для добавления слушателя
+    public void addListener(Listener listener) {
+        listeners.add(listener);
+    }
+
+    // Метод для удаления слушателя
+    public void removeListener(Listener listener) {
+        listeners.remove(listener);
+    }
+
+    // Уведомление всех слушателей об изменении
+    private void notifyListeners() {
+        for (Listener listener : listeners) {
+            listener.update();
+        }
+    }
+
+    // Пример изменения состояния
+    public void changeState() {
+        System.out.println("Состояние автомобиля изменено.");
+        notifyListeners();
+    }
+
 
     boolean stanWlaczenia = false;
     String nrRejest = "SO BEAST";
@@ -114,13 +144,13 @@ public class Samochod extends Thread {
     public void run() {
         System.out.println("Метод run() запущен.");
 
-        double deltaT = 0.1;
+        double deltaT = 0.01;
 
         while (true) {
             if (cel != null) {
                 double odleglosc = Math.sqrt(Math.pow(cel.x - pozycja.x, 2) + Math.pow(cel.y - pozycja.y, 2));
 
-                if (odleglosc < 1.0) {
+                if (odleglosc == 0) {
                     cel = null;
                     continue;
                 }
@@ -134,10 +164,11 @@ public class Samochod extends Thread {
                 if (controller != null) {
                     Platform.runLater(controller::refresh);
                 }
+
             }
 
             try {
-                Thread.sleep(100); // Задержка на 100 мс
+                Thread.sleep(10); // Задержка на 100 мс
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
