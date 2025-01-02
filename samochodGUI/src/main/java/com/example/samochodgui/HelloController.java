@@ -146,6 +146,7 @@ public class HelloController {
             obroty.setText(String.valueOf(samochod.getSilnik().getObroty()));
             stanWlaczenia.setVisible(samochod.getStanWlaczenia());
             aktPredkosc.setText(String.format("%.0f", samochod.getAktPredkosc()));
+            samochodWaga.setText(String.valueOf(samochod.getWaga()));
         } else {
             samochodNazwa.clear();
             nrRejestracyjny.clear();
@@ -166,6 +167,7 @@ public class HelloController {
         predkosc.setText("");
         bieg.setText("");
         obroty.setText("");
+        samochodWaga.setText("");
         stanWlaczenia.setVisible(false);
         aktPredkosc.setText("");
         onWylancz();
@@ -216,14 +218,14 @@ public class HelloController {
     public void onUsun() {
         // Получаем выбранный автомобиль
         Samochod selectedCar = samochodyChoiceBox.getValue();
-        clear();
-        disable();
         if (selectedCar != null) {
             samochody.remove(selectedCar);
             if (!samochody.isEmpty()) {
                 samochodyChoiceBox.setValue(samochody.get(0));
                 samochod = samochody.get(0); // Обновляем текущий автомобиль
             } else {
+                clear();
+                disable();
                 samochodyChoiceBox.setValue(null);
                 samochod = null; // Сбрасываем объект
             }

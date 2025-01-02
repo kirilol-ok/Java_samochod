@@ -48,7 +48,7 @@ public class Samochod extends Thread {
     String model = "Toyota Prius";
     int predkoscMax = 350;
     double aktPredkosc = 0;
-    double waga = 0;
+    double waga = 100;
     //
     Silnik silnik;
     SkrzyniaBiegow skrzyniaBiegow;
