@@ -86,6 +86,7 @@ public class HelloController {
     @FXML
     public void initialize() {
         System.out.println("HelloController initialized");
+        samochody.forEach(samochod -> samochod.setController(this));
         samochodyChoiceBox.setItems(samochody);
 
         samochodyChoiceBox.setConverter(new StringConverter<>() {
@@ -117,8 +118,6 @@ public class HelloController {
         carImageView.setImage(carImage);
         carImageView.setFitWidth(80); // Set appropriate
         carImageView.setFitHeight(48);
-        carImageView.setTranslateX(0);
-        carImageView.setTranslateY(0);
         //
         mapa.setOnMouseClicked(event -> {
             double x = event.getX();
@@ -132,14 +131,13 @@ public class HelloController {
 
 
     @FXML
-    void refresh() {
+    public void refresh() {
         if (samochod != null) {
             Platform.runLater(() -> {
-                carImageView.setLayoutX(samochod.getPozycja().getX());
-                carImageView.setLayoutY(samochod.getPozycja().getY());
+                System.out.println("Platform running");
+                carImageView.setTranslateX(samochod.getPozycja().getX());
+                carImageView.setTranslateY(samochod.getPozycja().getY());
             });
-            carImageView.setLayoutX(samochod.getPozycja().getX());
-            carImageView.setLayoutY(samochod.getPozycja().getY());
             //
             samochodNazwa.setText(samochod.getSamochodName());
             nrRejestracyjny.setText(samochod.getNrRejest());
@@ -176,6 +174,7 @@ public class HelloController {
 
     public void addCarToList(String model, String nrRejest, double waga, int predkosc) {
         Samochod samochod = new Samochod(model, nrRejest, waga, predkosc);
+        samochod.setController(this);
         samochody.add(samochod);
         samochodyChoiceBox.setValue(samochod);
         refresh();
@@ -246,7 +245,6 @@ public class HelloController {
     private void onWlancz(){
         samochod.wlacz();
         stanWlaczenia.setVisible(true);
-        System.out.println("Samochod uruchomiony!");
         refresh();
 
     }
@@ -254,7 +252,6 @@ public class HelloController {
     private void onWylancz(){
         samochod.wylacz();
         stanWlaczenia.setVisible(false);
-        System.out.println("Samochod kaput");
         samochod.getSilnik().setObroty(0);
         obroty.setText("0");
         samochod.setPredkosc(0);

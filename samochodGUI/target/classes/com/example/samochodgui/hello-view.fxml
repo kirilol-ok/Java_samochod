@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
@@ -381,10 +380,10 @@
          </children>
       </VBox>
    </left>
-   <center>
-      <VBox prefHeight="820.0" prefWidth="972.0" BorderPane.alignment="CENTER">
+   <top>
+      <VBox prefHeight="55.0" prefWidth="1217.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="55.0" prefWidth="652.0">
+            <HBox prefHeight="55.0" prefWidth="962.0">
                <children>
                   <Label text="Samochod">
                      <HBox.margin>
@@ -430,15 +429,14 @@
                   </TextField>
                </children>
             </HBox>
-            <Pane prefHeight="632.0" prefWidth="652.0" style="-fx-background-color: #D3D3D3; -fx-background-radius: 20px; -fx-border-color: black; -fx-border-radius: 20px;">
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-               <children>
-                  <ImageView fx:id="carImageView" fitHeight="84.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </Pane>
          </children>
       </VBox>
+   </top>
+   <center>
+      <BorderPane fx:id="mapa" onMouseClicked="#setOnMouseClicked" BorderPane.alignment="TOP_LEFT">
+         <center>
+            <ImageView fx:id="carImageView" fitHeight="84.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_LEFT" />
+         </center>
+      </BorderPane>
    </center>
 </BorderPane>

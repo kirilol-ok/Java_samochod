@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<BorderPane fx:id="mapa" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#setOnMouseClicked" prefHeight="740.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.samochodgui.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.samochodgui.HelloController">
    <left>
       <VBox prefHeight="650.0" prefWidth="248.0" BorderPane.alignment="CENTER">
          <children>
@@ -433,6 +433,10 @@
       </VBox>
    </top>
    <center>
-      <ImageView fx:id="carImageView" fitHeight="84.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_LEFT" />
+      <BorderPane fx:id="mapa" onMouseClicked="#setOnMouseClicked" BorderPane.alignment="TOP_LEFT">
+         <center>
+            <ImageView fx:id="carImageView" fitHeight="84.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_LEFT" />
+         </center>
+      </BorderPane>
    </center>
 </BorderPane>

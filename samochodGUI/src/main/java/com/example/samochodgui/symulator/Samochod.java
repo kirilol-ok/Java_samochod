@@ -1,9 +1,18 @@
 package com.example.samochodgui.symulator;
 
 
+import com.example.samochodgui.HelloController;
 import javafx.application.Platform;
+import com.example.samochodgui.HelloController.*;
 
 public class Samochod extends Thread {
+    private HelloController controller;
+
+    // Метод для установки контроллера
+    public void setController(HelloController controller) {
+        this.controller = controller;
+    }
+
     boolean stanWlaczenia = false;
     String nrRejest = "SO BEAST";
     String model = "Toyota Prius";
@@ -60,6 +69,9 @@ public class Samochod extends Thread {
     public void jedzDo(Pozycja nowaPozycja){
         this.cel = nowaPozycja;
         System.out.println("Target required: " + cel.getX() + " " + cel.getY());
+        if (controller != null) {
+            Platform.runLater(controller::refresh);
+        }
     }
 
     public double getAktPredkosc(){
@@ -119,7 +131,9 @@ public class Samochod extends Thread {
                 pozycja.x += dx;
                 pozycja.y += dy;
 
-                System.out.printf("Samochod %s na pozycji: x=%.2f, y=%.2f%n", model, pozycja.x, pozycja.y);
+                if (controller != null) {
+                    Platform.runLater(controller::refresh);
+                }
             }
 
             try {
@@ -132,6 +146,5 @@ public class Samochod extends Thread {
 
     public static void main(String[] args) {
         Samochod samochod = new Samochod();
-        samochod.start();
     }
 }
