@@ -1,22 +1,15 @@
 package com.example.samochodgui;
 
-import com.example.samochodgui.symulator.Samochod;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class DodajSamochodController {
 
-    private HelloController controller;
+    private SamochodController controller;
 
-    public void setHelloController(HelloController controller){
+    public void setHelloController(SamochodController controller){
         this.controller = controller;
         System.out.println("Controller received: " + controller);
     }

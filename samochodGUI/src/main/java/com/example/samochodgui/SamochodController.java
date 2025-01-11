@@ -2,6 +2,7 @@ package com.example.samochodgui;
 
 import com.example.samochodgui.symulator.Samochod;
 import com.example.samochodgui.symulator.Pozycja;
+import com.example.samochodgui.symulator.Zawody;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -18,16 +20,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javafx.util.StringConverter;
 import javafx.scene.input.MouseEvent;
 
 
-public class HelloController {
+public class SamochodController {
     private Samochod samochod;
-    private HelloController controller;
+    private SamochodController controller;
 
-    private void setHelloController(HelloController controller){
+    private void setHelloController(SamochodController controller){
         this.controller = controller;
     }
 
@@ -54,6 +57,8 @@ public class HelloController {
     private Button dodajSamochod;
     @FXML
     private Button usunSamochod;
+    @FXML
+    private Button startRace;
 
     @FXML
     private TextField nrRejestracyjny;
@@ -72,6 +77,8 @@ public class HelloController {
 
     @FXML
     private Rectangle stanWlaczenia;
+    @FXML
+    private Circle stanSprzegla;
 
     @FXML
     private ImageView carImageView;
@@ -262,7 +269,7 @@ public class HelloController {
             System.out.println("Wlacz samochod!");
             pokazBlad("Wlacz samochod!");
         } else{
-            if(aktObroty + 305 >= aktMaxObroty){
+            if(aktObroty + 250 > aktMaxObroty){
                 System.out.println("Zwieksz bieg!!!");
                 pokazBlad("Zwieksz bieg!!!");
                 samochod.getSilnik().setObroty(aktMaxObroty);
@@ -289,6 +296,7 @@ public class HelloController {
     @FXML
     private void onWylancz(){
         samochod.wylacz();
+        onZwolnij();
         stanWlaczenia.setVisible(false);
         samochod.getSilnik().setObroty(0);
         obroty.setText("0");
@@ -307,19 +315,59 @@ public class HelloController {
         int aktMaxObroty = samochod.getSilnik().getMaxObroty()
                 /samochod.getSkrzyniaBiegow().getIloscBiegow()
                 *samochod.getSkrzyniaBiegow().getAktBieg();
-        samochod.getSilnik().setObroty(aktMaxObroty);
-        obroty.setText(String.valueOf(aktMaxObroty));
-        samochod.setPredkosc();
+        if(samochod.getSilnik().getObroty() > aktMaxObroty){
+            samochod.getSilnik().setObroty(aktMaxObroty);
+            obroty.setText(String.valueOf(aktMaxObroty));
+            samochod.setPredkosc();
+        }
         refresh();
     }
     @FXML
     private void onNacisnij(){
         samochod.getSkrzyniaBiegow().getSprzeglo().wcisnij();
+        stanSprzegla.setVisible(true);
+
+        zwiekszBieg.setDisable(true);
+        zmniejszBieg.setDisable(true);
+        dodajGazu.setDisable(true);
+        ujmijGazu.setDisable(true);
     }
     @FXML
     private void onZwolnij(){
         samochod.getSkrzyniaBiegow().getSprzeglo().zwolnij();
+        stanSprzegla.setVisible(false);
+
+        zwiekszBieg.setDisable(false);
+        zmniejszBieg.setDisable(false);
+        dodajGazu.setDisable(false);
+        ujmijGazu.setDisable(false);
     }
+
+    @FXML
+    public void onStartRace() {
+        if (samochody.isEmpty()) {
+            pokazBlad("Nie ma samochodow dla zawodow");
+            return;
+        }
+
+        // Создаём объект гонок
+        Zawody zawody = new Zawody("Zawody na predkosc", new Date());
+        for (Samochod car : samochody) {
+            zawody.dodajUczestnika(car);
+        }
+
+        // Проводим гонку
+        Samochod winner = zawody.rozegrajZawody();
+
+        // Отображаем результаты
+        if (winner != null) {
+            pokazBlad("Zwyciezca: " + winner.getSamochodName() + " z predkoscia maksymalna: " + winner.getMaxPredkosc() + " km/g.");
+        } else {
+            pokazBlad("Nie udalo sie wyznaczyc zwyciezce");
+        }
+    }
+
+
 
     public void pokazBlad(String wiadomosc) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

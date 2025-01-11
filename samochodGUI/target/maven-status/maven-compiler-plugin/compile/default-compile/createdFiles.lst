@@ -1,3 +1,13 @@
-module-info.class
+com\example\samochodgui\symulator\Listener.class
+com\example\samochodgui\DodajSamochodController.class
 com\example\samochodgui\HelloApplication.class
+com\example\samochodgui\symulator\Samochod.class
+com\example\samochodgui\HelloController$1.class
+com\example\samochodgui\symulator\SkrzyniaBiegow.class
+com\example\samochodgui\symulator\Komponent.class
+com\example\samochodgui\symulator\Pozycja.class
+com\example\samochodgui\symulator\Silnik.class
+module-info.class
+com\example\samochodgui\symulator\Sprzeglo.class
 com\example\samochodgui\HelloController.class
+com\example\samochodgui\symulator\Zawody.class

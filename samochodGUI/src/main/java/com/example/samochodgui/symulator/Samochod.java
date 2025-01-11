@@ -1,35 +1,30 @@
 package com.example.samochodgui.symulator;
 
 
-import com.example.samochodgui.HelloController;
+import com.example.samochodgui.SamochodController;
 import javafx.application.Platform;
-import com.example.samochodgui.HelloController.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Samochod extends Thread {
-    private HelloController controller;
+    private SamochodController controller;
 
-    // Метод для установки контроллера
-    public void setController(HelloController controller) {
+    public void setController(SamochodController controller) {
         this.controller = controller;
     }
 
     private List<Listener> listeners = new ArrayList<>();
 
-    // Метод для добавления слушателя
     public void addListener(Listener listener) {
         listeners.add(listener);
     }
 
-    // Метод для удаления слушателя
     public void removeListener(Listener listener) {
         listeners.remove(listener);
     }
 
-    // Уведомление всех слушателей об изменении
     private void notifyListeners() {
         for (Listener listener : listeners) {
             listener.update();
@@ -106,6 +101,10 @@ public class Samochod extends Thread {
 
     public double getAktPredkosc(){
         return aktPredkosc;
+    }
+
+    public double getMaxPredkosc(){
+        return predkoscMax;
     }
 
     public void setPredkosc(){
