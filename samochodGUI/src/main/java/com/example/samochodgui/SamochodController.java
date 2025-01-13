@@ -31,7 +31,7 @@ import javafx.scene.input.MouseEvent;
 public class SamochodController implements Listener {
     @Override
     public void update() {
-        refresh();
+        Platform.runLater(this::refresh);
     }
 
     private Samochod samochod;
@@ -102,7 +102,7 @@ public class SamochodController implements Listener {
         System.out.println("HelloController initialized");
         samochody.forEach(samochod -> {
             samochod.setController(this);
-            samochod.addListener(controller);
+            samochod.addListener(this);
         });
         samochodyChoiceBox.setItems(samochody);
 
@@ -163,6 +163,8 @@ public class SamochodController implements Listener {
             stanWlaczenia.setVisible(samochod.getStanWlaczenia());
             aktPredkosc.setText(String.format("%.0f", samochod.getAktPredkosc()));
             samochodWaga.setText(String.valueOf(samochod.getWaga()));
+            nacisnij.setDisable(!samochod.getStanDostepnosciSprzegla());
+            zwolnij.setDisable(!samochod.getStanWlaczenia());
         } else {
             samochodNazwa.clear();
             nrRejestracyjny.clear();
@@ -301,7 +303,9 @@ public class SamochodController implements Listener {
     private void onWlancz(){
         samochod.wlacz();
         stanWlaczenia.setVisible(true);
+        samochod.setStanDostepnosciSprzegla(true);
         refresh();
+
 
     }
     @FXML
@@ -313,7 +317,10 @@ public class SamochodController implements Listener {
         obroty.setText("0");
         samochod.setPredkosc(0);
         predkosc.setText("0");
+        samochod.setStanDostepnosciSprzegla(false);
         refresh();
+
+
     }
     @FXML
     private void onZwiekszBieg(){

@@ -27,12 +27,15 @@ public class Samochod extends Thread {
 
     public void notifyListeners() {
         for (Listener listener : listeners) {
-            listener.update();
+            if (listener != null) {
+                listener.update();
+            }
         }
     }
 
 
     boolean stanWlaczenia = false;
+    boolean stanDostepnosciSprzegla = false;
     String nrRejest = "SO BEAST";
     String model = "Toyota Prius";
     int predkoscMax = 350;
@@ -90,6 +93,7 @@ public class Samochod extends Thread {
         System.out.println("Target required: " + cel.getX() + " " + cel.getY());
         if (controller != null) {
             Platform.runLater(controller::refresh);
+            notifyListeners();
         }
     }
 
@@ -134,6 +138,10 @@ public class Samochod extends Thread {
 
     public boolean getStanWlaczenia(){ return stanWlaczenia; }
 
+    public boolean getStanDostepnosciSprzegla() { return stanDostepnosciSprzegla; }
+
+    public void setStanDostepnosciSprzegla(boolean b){this.stanDostepnosciSprzegla = b;}
+
     public void run() {
         System.out.println("Метод run() запущен.");
 
@@ -154,10 +162,7 @@ public class Samochod extends Thread {
                 pozycja.x += dx;
                 pozycja.y += dy;
 
-                if (controller != null) {
-                    Platform.runLater(controller::refresh);
-                }
-
+                notifyListeners();
             }
 
             try {
