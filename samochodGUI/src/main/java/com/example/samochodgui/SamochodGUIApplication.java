@@ -33,7 +33,7 @@ public class SamochodGUIApplication extends Application {
         stage.show();
 
         Samochod samochod = new Samochod();
-        samochod.changeState();
+        samochod.notifyListeners();
 
         URL imageUrl = getClass().getResource("/images/car_background.jpg");
         if (imageUrl == null) {

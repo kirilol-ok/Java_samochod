@@ -25,16 +25,10 @@ public class Samochod extends Thread {
         listeners.remove(listener);
     }
 
-    private void notifyListeners() {
+    public void notifyListeners() {
         for (Listener listener : listeners) {
             listener.update();
         }
-    }
-
-    // Пример изменения состояния
-    public void changeState() {
-        System.out.println("Состояние автомобиля изменено.");
-        notifyListeners();
     }
 
 

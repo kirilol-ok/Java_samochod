@@ -1,5 +1,6 @@
 package com.example.samochodgui;
 
+import com.example.samochodgui.symulator.Listener;
 import com.example.samochodgui.symulator.Samochod;
 import com.example.samochodgui.symulator.Pozycja;
 import com.example.samochodgui.symulator.Zawody;
@@ -7,6 +8,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -26,7 +28,12 @@ import javafx.util.StringConverter;
 import javafx.scene.input.MouseEvent;
 
 
-public class SamochodController {
+public class SamochodController implements Listener {
+    @Override
+    public void update() {
+        refresh();
+    }
+
     private Samochod samochod;
     private SamochodController controller;
 
@@ -93,7 +100,10 @@ public class SamochodController {
     @FXML
     public void initialize() {
         System.out.println("HelloController initialized");
-        samochody.forEach(samochod -> samochod.setController(this));
+        samochody.forEach(samochod -> {
+            samochod.setController(this);
+            samochod.addListener(controller);
+        });
         samochodyChoiceBox.setItems(samochody);
 
         samochodyChoiceBox.setConverter(new StringConverter<>() {
@@ -118,12 +128,11 @@ public class SamochodController {
         if (!samochody.isEmpty()) {
             samochodyChoiceBox.setValue(samochody.get(0));
         }
-        //
-        // Load and set the car image
+
         Image carImage = new Image(getClass().getResource("/images/car.png").toExternalForm());
         System.out.println("Image width: " + carImage.getWidth() + ", height: " + carImage.getHeight());
         carImageView.setImage(carImage);
-        carImageView.setFitWidth(80); // Set appropriate
+        carImageView.setFitWidth(80);
         carImageView.setFitHeight(48);
         //
         mapa.setOnMouseClicked(event -> {
@@ -216,6 +225,7 @@ public class SamochodController {
     public void addCarToList(String model, String nrRejest, double waga, int predkosc) {
         Samochod samochod = new Samochod(model, nrRejest, waga, predkosc);
         samochod.setController(this);
+        samochod.addListener(this);
         samochody.add(samochod);
         samochodyChoiceBox.setValue(samochod);
         refresh();
@@ -226,6 +236,7 @@ public class SamochodController {
         // Получаем выбранный автомобиль
         Samochod selectedCar = samochodyChoiceBox.getValue();
         if (selectedCar != null) {
+            selectedCar.removeListener(controller);
             samochody.remove(selectedCar);
             if (!samochody.isEmpty()) {
                 samochodyChoiceBox.setValue(samochody.get(0));
@@ -252,7 +263,7 @@ public class SamochodController {
 
         Pozycja nowaPozycja = new Pozycja(x, y);
         samochod.jedzDo(nowaPozycja);
-
+        samochod.notifyListeners();
         refresh();
     }
 
